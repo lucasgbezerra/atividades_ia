@@ -49,7 +49,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouseX, mouseY = event.pos
                 mouseButton = event.button
-                print(mouseX//32, mouseY//32, mouseButton)
+                # print(mouseX//32, mouseY//32, mouseButton)
                 board.cellClicked(mouseX, mouseY, mouseButton)
 
         board.draw()

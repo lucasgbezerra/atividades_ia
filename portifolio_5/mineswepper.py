@@ -12,11 +12,12 @@ mapa = [(3, 13), (10, 6), (13, 11), (11, 11), (2, 8), (6, 2), (6, 11), (4, 2), (
 
 class Board():
     def __init__(self, screen, width, height, size):
-        self.numMines = 30
+        self.numMines = 1
         self.grid = []
         self.coveredField = set()
         self.flags = set()
         self.mines = set()
+
         self.screen = screen
         self.rows = width // size
         self.cols = height // size
@@ -37,18 +38,14 @@ class Board():
     #
 
     def buildMapRandom(self):
-        # while len(self.mines) < self.numMines:
-        #     row = random.randint(0, self.rows-1)
-        #     col = random.randint(0, self.rows-1)
-        #     if self.grid[row][col].hasMine:
-        #         continue
-        #     self.grid[row][col].hasMine = True
-        #     self.mines.add((row, col))
-        # print(self.mines)
-        self.mines = mapa
-        for mine in self.mines:
-            row, col = mine
+        while len(self.mines) < self.numMines:
+            row = random.randint(0, self.rows-1)
+            col = random.randint(0, self.rows-1)
+            if self.grid[row][col].hasMine:
+                continue
             self.grid[row][col].hasMine = True
+            self.mines.add((row, col))
+        # print(self.mines)
 
     def adjacentMines(self, x, y):
         for i in range(x-1, x+2):
@@ -79,7 +76,11 @@ class Board():
                 else:
                     self.screen.blit(cell.image, (cell.x * self.size, cell.y * self.size))
 
-            pygame.display.update()
+        pygame.display.update()
+        
+        print(f"Abertos ({len(self.coveredField)})")
+
+
 
     def uncoverCells(self, clickedCell):
         """
@@ -93,7 +94,7 @@ class Board():
 
         while queue:
             cell = queue.pop()
-            print(cell)
+            # print(cell)
 
             if cell.adjacentMines == 0:
                 neighbors = cell.getNeighbors(self.rows, self.cols)
@@ -106,15 +107,30 @@ class Board():
         for i in visited:
             self.coveredField.add(i)
 
-    def gameOver(self, cell):
+    def gameOver(self):
         lostFont = pygame.font.SysFont('comicsans', 40)
         text = lostFont.render("Você perdeu! Jogue novamente.", 1, "black")
         
-        self.screen.blit(cell.image, (cell.x * self.size, cell.y * self.size))    
         self.screen.blit(text, (self.rows*self.size / 2 - text.get_width() / 2, self.cols*self.size / 2 - text.get_height() / 2))
         
         pygame.display.update()
 
+    def win(self):
+        lostFont = pygame.font.SysFont('comicsans', 40)
+        text = lostFont.render("Parabéns! Você Venceu!", 1, "black")
+
+        self.screen.blit(text, (self.rows*self.size / 2 - text.get_width() / 2, self.cols*self.size / 2 - text.get_height() / 2))
+        pygame.display.update()
+
+    def checkResult(self):
+        for row, col in self.mines:
+            if  self.grid[row][col] in self.coveredField:
+                self.gameOver()
+        
+        if len(self.coveredField) == (self.rows * self.cols) - self.numMines:
+            self.win()
+
+        pygame.time.delay(5000)
     def cellClicked(self, mouseX, mouseY, mouseButton):
         cell = self.grid[mouseX//self.size][mouseY//self.size]
 
@@ -127,10 +143,8 @@ class Board():
             elif mouseButton == MOUSEBUTTONLEFT:
                 if cell not in self.flags:
                     self.coveredField.add(cell)
-                    if cell.hasMine:
-                        self.gameOver(cell)
-                        pygame.time.delay(5000)
-                    else:
+                    if not cell.hasMine:
                         self.uncoverCells(cell)
 
         self.draw()
+        self.checkResult()
