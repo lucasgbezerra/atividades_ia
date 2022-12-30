@@ -21,30 +21,19 @@ class Cell():
         self.x = x
         self.y = y
         self.hasMine = False
-        self.reveal = False
         self.adjacentMines = 0
+        self.flag = False
         self.image = cellImg
-        self.marked = False
 
-    def draw(self, screen):
-        if self.reveal:
-            if self.hasMine:
-                self.image = mineImg
-            else:
-                self.image = cellImgList[self.adjacentMines]
-        elif self.marked:
-            self.image = flagImg
-        else:
-            self.image = cellImg
+    def __str__(self):
+        return f"Pos X: {self.x},  Pos Y: {self.y} => Mina: {self.hasMine}, Vizinhos: {self.adjacentMines}, Flag: {self.flag}"
 
-        screen.blit(self.image, (self.x, self.y))
+    def getNeighbors(self, rows, cols):
+        neighbors = set()
+        for i in range(self.x-1, self.x+2):
+            for j in range(self.y-1, self.y+2):
+                if i >= 0 and  i < rows and j >= 0 and j < cols:
+                    if (i, j) != (self.x, self.y):
+                        neighbors.add((i, j))
 
-
-    def clicked(self, mouseButton):
-        if mouseButton == MOUSEBUTTONLEFT:
-            self.reveal = True
-        elif mouseButton == MOUSEBUTTONRIGHT:
-            self.marked = True
-
-        # self.draw()
-        return self.hasMine
+        return neighbors

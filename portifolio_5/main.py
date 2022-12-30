@@ -39,7 +39,8 @@ def main():
 
     board.setupBoard()
 
-    while True:
+    run = True
+    while run:
 
         # event handling loop
         for event in pygame.event.get(): 
@@ -48,11 +49,11 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouseX, mouseY = event.pos
                 mouseButton = event.button
-                print(mouseX, mouseY, mouseButton)
+                print(mouseX//32, mouseY//32, mouseButton)
                 board.cellClicked(mouseX, mouseY, mouseButton)
 
-
-        pygame.display.update()
+        board.draw()
+        
 
 
 if __name__ == "__main__":
