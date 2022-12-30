@@ -6,8 +6,8 @@ from cell import Cell, cellImg, flagImg, mineImg, cellImgList
 MOUSEBUTTONLEFT = 1
 MOUSEBUTTONRIGHT = 3
 
-mapa = [(3, 13), (10, 6), (13, 11), (11, 11), (2, 8), (6, 2), (6, 11), (4, 2), (5, 12), (11, 1), (9, 10), (8, 8), (10, 11), (9, 13), (0, 4),
-        (10, 8), (15, 4), (13, 10), (6, 4), (6, 13), (14, 8), (5, 5), (8, 4), (5, 8), (8, 7), (13, 0), (10, 13), (15, 0), (11, 15), (1, 10)]
+# mapa = [(3, 13), (10, 6), (13, 11), (11, 11), (2, 8), (6, 2), (6, 11), (4, 2), (5, 12), (11, 1), (9, 10), (8, 8), (10, 11), (9, 13), (0, 4),
+#         (10, 8), (15, 4), (13, 10), (6, 4), (6, 13), (14, 8), (5, 5), (8, 4), (5, 8), (8, 7), (13, 0), (10, 13), (15, 0), (11, 15), (1, 10)]
 
 
 class Board():
@@ -80,7 +80,13 @@ class Board():
         
         print(f"Abertos ({len(self.coveredField)})")
 
+    def reset(self):
+        self.grid = []
+        self.coveredField = set()
+        self.flags = set()
+        self.mines = set()
 
+        self.setupBoard()
 
     def uncoverCells(self, clickedCell):
         """
@@ -129,8 +135,10 @@ class Board():
         
         if len(self.coveredField) == (self.rows * self.cols) - self.numMines:
             self.win()
-
+        
         pygame.time.delay(5000)
+        self.reset()
+
     def cellClicked(self, mouseX, mouseY, mouseButton):
         cell = self.grid[mouseX//self.size][mouseY//self.size]
 
