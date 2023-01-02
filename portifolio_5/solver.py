@@ -22,15 +22,15 @@ class Solver():
             sentence.removeMine(cell)
 
     def markSafe(self, cell):
-        if cell not in self.revealed:
-            self.safes.add(cell)
+        self.safes.add(cell)
         for sentence in self.knowledgeBase:
             sentence.removeSafe(cell)
 
     def addKnowledge(self, cell, cells):
-        self.markSafe(cell)
         self.revealed.update(([c.getPosition() for c in cells]))
-        print(f"Base: {len(self.knowledgeBase)}")
+        self.markSafe(cell)
+        # print(f"Base: {len(self.knowledgeBase)}")
+
         for c in cells:
             if c.adjacentMines == 0:
                 continue
@@ -44,7 +44,7 @@ class Solver():
 
                     if (i, j) in self.revealed:
                         continue
-                    
+
                     neighbors.append((i,j))
 
             if len(neighbors) == 0:
@@ -56,7 +56,17 @@ class Solver():
             self.createSentence(neighbors, c.adjacentMines)
         
         self.inference()
+        self.cleanKnowledge()
 
+    def cleanKnowledge(self):
+        for s in self.knowledgeBase:
+            while self.knowledgeBase.count(s) > 1:
+                self.knowledgeBase.remove(s)
+
+        for s in self.knowledgeBase:
+            if len(s.cells) == 0:
+                self.knowledgeBase.remove(s)
+                    
     def updateKnowlegde(self):
         for sentence in self.knowledgeBase:      
             self.safes.update(sentence.knownSafes())
@@ -71,9 +81,10 @@ class Solver():
                 self.knowledgeBase.remove(sentence)
     
     def createSentence(self, neighbors, numMines):
-        sentence = Sentence(neighbors, numMines)
-        if sentence in self.knowledgeBase: 
+        sentence = Sentence(sorted(neighbors), numMines)
+        if sentence in self.knowledgeBase:
             return
+                
         self.knowledgeBase.append(sentence)
         self.safes.update(sentence.knownSafes())
         self.mines.update(sentence.knownMines())
@@ -81,44 +92,40 @@ class Solver():
         self.updateKnowlegde()
 
     def inference(self):
+        inferences = []
         for sentence, sentence1 in combinations(self.knowledgeBase, 2):
-            hasSubset = False
             if sentence == sentence1:
                 continue
-            # print(f"S1: {sentence} | S2: {sentence1}")
+            
             if sentence.cells.issubset(sentence1.cells):
                 cells = sentence1.cells - sentence.cells
                 numMines = sentence1.numMines - sentence.numMines
-                hasSubset = True
+                inferences.append((cells, numMines))
 
             if sentence1.cells.issubset(sentence.cells):
                 cells = sentence.cells - sentence1.cells
                 numMines = sentence.numMines - sentence1.numMines
-                hasSubset = True
-                
-            if hasSubset:
-                self.createSentence(cells, numMines)
+                inferences.append((cells, numMines))
+
+        if len(inferences) > 0:
+            for c, m in inferences:
+                self.createSentence(c,m)
 
     def makeMove(self):
-
-        if len(self.safes) != 0:
+        safemoves = self.safes - self.revealed
+        if len(safemoves) != 0:
             self.numSafeMoves += 1
-            safeMove = random.choice(list(self.safes))
+            safeMove = random.choice(list(safemoves))
             print(f"IA fazendo movimento seguro ({self.numSafeMoves}: {safeMove})")
-            # print("----- SAFE MOVES ----")
-            # print(f"Moves: {len(self.revealed)} SAFES: {len(self.safes)}")
-            # print(f"MOVES: {self.revealed}")
-            # print(f"SAFES: {self.safes}")
-            # print(f"SAFE MOVES: {safeMoves}")
-            # print(f"Movimento seguro ({self.numSafeMoves}): {safeMove}")
-            # print("----- SAFE MOVES ----")
+
             return (safeMove[0], safeMove[1])
         else:
             return self.makeRandomMove()
+
             
 
     def makeRandomMove(self):
-        print("Realizando movimento aleatório!")
+        # print("Realizando movimento aleatório!")
         randomMove = None
         while randomMove == None:
             row = random.randint(0, self.rows-1)

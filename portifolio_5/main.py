@@ -16,7 +16,6 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 BG_COLOR = (192, 192, 192)
 
-
 # stores XY of mouse events
 mouseX = 0
 mouseY = 0
@@ -27,6 +26,7 @@ def terminate():
     sys.exit()
 
 def main():
+    moves = 0
     AIsolver = True
     setImages(WIDTH // ROWS, HEIGHT // COLS)
 
@@ -44,8 +44,6 @@ def main():
 
     run = True
     while run:
-
-        AIsolver = False
         # event handling loop
         for event in pygame.event.get():
             if event.type == pygame.QUIT or (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE):
@@ -54,24 +52,19 @@ def main():
                 mouseX, mouseY = event.pos
                 mouseButton = event.button
                 board.cellClicked(mouseX//(WIDTH // ROWS), mouseY//(HEIGHT // COLS), mouseButton)
-            if event.type == 771:
-                # print("Space")
-                AIsolver = True
 
         # AI
         if AIsolver:
+            moves += 1
+            print(f"----{moves}----")
+            
             move = solver.makeMove()
             if move is None:
                 print("No moves left to make.")
             else:
                 board.cellClicked(move[0], move[1])
                 solver.addKnowledge(move, board.revealedCells)
-                
-            
-            
-        # board.draw()
-        # pygame.time.delay(2000)
-        
+                # pygame.time.delay(100)       
 
 
 if __name__ == "__main__":

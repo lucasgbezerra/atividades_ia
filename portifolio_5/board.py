@@ -1,7 +1,7 @@
 import random
 import pygame
 from collections import deque
-from utils import setImages, IMGS 
+from utils import setImages 
 from cell import Cell
 
 MOUSEBUTTONLEFT = 1
@@ -41,6 +41,8 @@ class Board():
                 continue
             self.grid[row][col].hasMine = True
             self.mines.add((row, col))
+        # for row, col in self.mines:
+        #     self.grid[row][col].hasMine = True
 
     def adjacentMines(self, x, y):
         for i in range(x-1, x+2):
@@ -125,7 +127,6 @@ class Board():
         
         pygame.display.update()
 
-        pygame.time.delay(5000)
         # self.reset()
 
     def won(self):
@@ -135,7 +136,6 @@ class Board():
         self.screen.blit(text, (self.rows*self.size / 2 - text.get_width() / 2, self.cols*self.size / 2 - text.get_height() / 2))
         pygame.display.update()
 
-        pygame.time.delay(5000)
         # self.reset()
 
     def checkResult(self):
@@ -150,9 +150,8 @@ class Board():
     def  getPositionRevealedCells(self):
         positions = []
         for cell in self.revealedCells:
-            pos =cell.getPosition()
-            positions.append[pos]
-
+            pos = cell.getPosition()
+            positions.append(pos)
         return positions
 
 
