@@ -7,11 +7,9 @@ from utils import setImages
 
 WIDTH = 512
 HEIGHT = 512
-
-rows = 8
-cols = 8
-SIZE = WIDTH // rows
-
+ROWS = 16
+COLS = 16
+NUM_MINES= 35
 
 # Constants to define the colors
 BLACK = (0, 0, 0)
@@ -30,19 +28,19 @@ def terminate():
 
 def main():
     AIsolver = True
-    setImages(WIDTH // rows, HEIGHT // cols)
+    setImages(WIDTH // ROWS, HEIGHT // COLS)
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Minesweeper')
     pygame.init()
-    FPSCLOCK = pygame.time.Clock()
+    # FPSCLOCK = pygame.time.Clock()
     screen.fill(BG_COLOR)
 
-    board = Board(screen, WIDTH, HEIGHT, SIZE)
+    board = Board(screen, ROWS, COLS, WIDTH//ROWS, NUM_MINES)
 
     board.setupBoard()
 
-    solver = Solver(rows,cols)
+    solver = Solver(ROWS,COLS)
 
     run = True
     while run:
@@ -55,7 +53,7 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouseX, mouseY = event.pos
                 mouseButton = event.button
-                board.cellClicked(mouseX//SIZE, mouseY//SIZE, mouseButton)
+                board.cellClicked(mouseX//(WIDTH // ROWS), mouseY//(HEIGHT // COLS), mouseButton)
             if event.type == 771:
                 # print("Space")
                 AIsolver = True

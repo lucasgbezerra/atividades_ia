@@ -8,8 +8,8 @@ MOUSEBUTTONLEFT = 1
 MOUSEBUTTONRIGHT = 3
 
 class Board():
-    def __init__(self, screen, width, height, size):
-        self.numMines = 5
+    def __init__(self, screen, rows, cols, size, numMines):
+        self.numMines = numMines
         self.grid = []
         self.revealedCells = set()
         self.flags = set()
@@ -17,8 +17,8 @@ class Board():
 
         self.images = setImages(size, size)
         self.screen = screen
-        self.rows = width // size
-        self.cols = height // size
+        self.rows = rows
+        self.cols = cols
         self.size = size
 
     def setupBoard(self):
