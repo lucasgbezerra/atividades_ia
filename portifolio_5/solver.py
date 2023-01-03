@@ -16,6 +16,15 @@ class Solver():
         self.numRandomMoves = 0
         self.numSafeMoves = 0
 
+    def reset(self):
+        self.revealed.clear()
+        self.mines.clear()
+        self.safes.clear()
+        self.knowledgeBase = []
+
+        self.numRandomMoves = 0
+        self.numSafeMoves = 0
+
     def markMine(self, cell):
         self.mines.add(cell)
         for sentence in self.knowledgeBase:
@@ -121,8 +130,6 @@ class Solver():
             return (safeMove[0], safeMove[1])
         else:
             return self.makeRandomMove()
-
-            
 
     def makeRandomMove(self):
         # print("Realizando movimento aleatório!")

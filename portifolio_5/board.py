@@ -121,31 +121,42 @@ class Board():
 
     def gameOver(self):
         lostFont = pygame.font.SysFont('comicsans', 40)
+        resetFont = pygame.font.SysFont('comicsans', 30)
+
         text = lostFont.render("Você perdeu! Jogue novamente.", 1, "black")
+        text2 = resetFont.render("Pressione a barra de espaço para reiniciar", 1, "black")
         
         self.screen.blit(text, (self.rows*self.size / 2 - text.get_width() / 2, self.cols*self.size / 2 - text.get_height() / 2))
+        self.screen.blit(text2, (self.rows*self.size / 2 - text.get_width() / 2, (self.cols*self.size / 2 - text.get_height() / 2) + 30))
         
         pygame.display.update()
-
-        # self.reset()
 
     def won(self):
         lostFont = pygame.font.SysFont('comicsans', 40)
+        resetFont = pygame.font.SysFont('comicsans', 30)
         text = lostFont.render("Parabéns! Você Venceu!", 1, "black")
+        text2 = resetFont.render("Pressione a barra de espaço para reiniciar", 1, "black")
+
 
         self.screen.blit(text, (self.rows*self.size / 2 - text.get_width() / 2, self.cols*self.size / 2 - text.get_height() / 2))
+        self.screen.blit(text2, (self.rows*self.size / 2 - text.get_width() / 2, (self.cols*self.size / 2 - text.get_height() / 2) + 30))
+
         pygame.display.update()
 
-        # self.reset()
+        
 
     def checkResult(self):
         for row, col in self.mines:
             if  self.grid[row][col] in self.revealedCells:
                 print(f"Mina na casa ({row, col})")
                 self.gameOver()
+                return -1
         
         if len(self.revealedCells) == (self.rows * self.cols) - self.numMines:
             self.won()
+            return 1
+
+        return 0
 
     def  getPositionRevealedCells(self):
         positions = []
@@ -171,4 +182,3 @@ class Board():
                         self.uncoverCells(cell)
 
         self.draw()
-        self.checkResult()

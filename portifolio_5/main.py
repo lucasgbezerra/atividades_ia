@@ -11,9 +11,7 @@ ROWS = 16
 COLS = 16
 NUM_MINES= 35
 
-# Constants to define the colors
-BLACK = (0, 0, 0)
-WHITE = (255, 255, 255)
+# Cor de background
 BG_COLOR = (192, 192, 192)
 
 # stores XY of mouse events
@@ -28,7 +26,7 @@ def terminate():
 def main():
     moves = 0
     AIsolver = True
-    setImages(WIDTH // ROWS, HEIGHT // COLS)
+    result = 0
 
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption('Minesweeper')
@@ -37,7 +35,6 @@ def main():
     screen.fill(BG_COLOR)
 
     board = Board(screen, ROWS, COLS, WIDTH//ROWS, NUM_MINES)
-
     board.setupBoard()
 
     solver = Solver(ROWS,COLS)
@@ -52,9 +49,14 @@ def main():
                 mouseX, mouseY = event.pos
                 mouseButton = event.button
                 board.cellClicked(mouseX//(WIDTH // ROWS), mouseY//(HEIGHT // COLS), mouseButton)
+            elif result != 0 and event.type == 771:
+                board.reset()
+                solver.reset()
+                result = 0
+                pygame.time.delay(300)       
 
         # AI
-        if AIsolver:
+        if AIsolver and result == 0:
             moves += 1
             print(f"----{moves}----")
             
@@ -64,8 +66,9 @@ def main():
             else:
                 board.cellClicked(move[0], move[1])
                 solver.addKnowledge(move, board.revealedCells)
-                # pygame.time.delay(100)       
+                pygame.time.delay(100)       
 
+        result = board.checkResult()
 
 if __name__ == "__main__":
     main()
