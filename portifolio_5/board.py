@@ -1,4 +1,5 @@
 import random
+from time import perf_counter
 import pygame
 from collections import deque
 from utils import setImages 
@@ -8,7 +9,7 @@ MOUSEBUTTONLEFT = 1
 MOUSEBUTTONRIGHT = 3
 
 class Board():
-    def __init__(self, screen, rows, cols, size, numMines):
+    def __init__(self, screen, clock, rows, cols, size, numMines):
         self.numMines = numMines
         self.grid = []
         self.revealedCells = set()
@@ -25,7 +26,7 @@ class Board():
         self.buildGrid()
         self.buildMapRandom()
         self.fillingBoard()
-        self.draw()
+        # self.draw()
 
     def buildGrid(self):
         for line in range(self.rows):
@@ -61,6 +62,12 @@ class Board():
                 else:
                     self.adjacentMines(i, j)
     
+    def addFlags(self, newFlags):
+        for row, col in newFlags:
+            cell = self.grid[row][col]
+            if cell not in self.flags:
+                self.flags.add(cell)
+    
     def getNeighbors(self, cell):
         neighbors = set()
         x, y = cell.getPosition()
@@ -83,9 +90,9 @@ class Board():
                 else:
                     self.screen.blit(cell.image, (cell.x * self.size, cell.y * self.size))
 
-        pygame.display.update()
+        # pygame.display.flip()
+        pygame.display.update(0,0,self.rows*self.size, self.cols*self.size)
         
-        print(f"Abertos ({len(self.revealedCells)})")
 
     def reset(self):
         self.grid = []
@@ -127,7 +134,7 @@ class Board():
         text2 = resetFont.render("Pressione a barra de espaço para reiniciar", 1, "black")
         
         self.screen.blit(text, (self.rows*self.size / 2 - text.get_width() / 2, self.cols*self.size / 2 - text.get_height() / 2))
-        self.screen.blit(text2, (self.rows*self.size / 2 - text.get_width() / 2, (self.cols*self.size / 2 - text.get_height() / 2) + 30))
+        self.screen.blit(text2, (self.rows*self.size / 2 - text2.get_width() / 2, (self.cols*self.size / 2 - text2.get_height() / 2) + 30))
         
         pygame.display.update()
 
@@ -139,7 +146,7 @@ class Board():
 
 
         self.screen.blit(text, (self.rows*self.size / 2 - text.get_width() / 2, self.cols*self.size / 2 - text.get_height() / 2))
-        self.screen.blit(text2, (self.rows*self.size / 2 - text.get_width() / 2, (self.cols*self.size / 2 - text.get_height() / 2) + 30))
+        self.screen.blit(text2, (self.rows*self.size / 2 - text2.get_width() / 2, (self.cols*self.size / 2 - text2.get_height() / 2) + 30))
 
         pygame.display.update()
 
@@ -180,5 +187,18 @@ class Board():
                     self.revealedCells.add(cell)
                     if not cell.hasMine:
                         self.uncoverCells(cell)
+        
+        print(f"Abertos ({len(self.revealedCells)})")
 
-        self.draw()
+    def infos(self, time):
+        print(f"Tempo: {time:.0f} s")
+        lostFont = pygame.font.SysFont('comicsans', 30)
+        timeText = lostFont.render(f"Tempo: {time:.0f} s", 1, "white")
+        flagsText = lostFont.render(f"Flags: {len(self.flags)}", 1, "white")
+
+        self.screen.blit(timeText, (20, self.cols*self.size + 10))
+        self.screen.blit(flagsText, (self.rows*self.size - 100, self.cols*self.size + 10))
+
+        width, height = self.screen.get_size()
+
+        pygame.display.update((0, self.cols*self.size, width,  height - self.cols*self.size))
