@@ -75,7 +75,7 @@ def main():
 
 
         if state == 1:
-            board.infos(int(time() - startTime))
+            board.infos(int(time() - startTime), AIsolver)
             board.draw()
 
         state = board.checkResult()
