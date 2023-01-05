@@ -127,10 +127,10 @@ class Board():
             self.revealedCells.add(i)
 
     def gameOver(self):
-        lostFont = pygame.font.SysFont('comicsans', 40)
+        font = pygame.font.SysFont('comicsans', 40)
         resetFont = pygame.font.SysFont('comicsans', 30)
 
-        text = lostFont.render("Você perdeu! Jogue novamente.", 1, "black")
+        text = font.render("Você perdeu! Jogue novamente.", 1, "black")
         text2 = resetFont.render("Pressione a barra de espaço para reiniciar", 1, "black")
         
         self.screen.blit(text, (self.rows*self.size / 2 - text.get_width() / 2, self.cols*self.size / 2 - text.get_height() / 2))
@@ -139,9 +139,9 @@ class Board():
         pygame.display.update()
 
     def won(self):
-        lostFont = pygame.font.SysFont('comicsans', 40)
+        font = pygame.font.SysFont('comicsans', 40)
         resetFont = pygame.font.SysFont('comicsans', 30)
-        text = lostFont.render("Parabéns! Você Venceu!", 1, "black")
+        text = font.render("Parabéns! Você Venceu!", 1, "black")
         text2 = resetFont.render("Pressione a barra de espaço para reiniciar", 1, "black")
 
 
@@ -157,13 +157,13 @@ class Board():
             if  self.grid[row][col] in self.revealedCells:
                 print(f"Mina na casa ({row, col})")
                 self.gameOver()
-                return -1
+                return 2
         
         if len(self.revealedCells) == (self.rows * self.cols) - self.numMines:
             self.won()
-            return 1
+            return 2
 
-        return 0
+        return 1
 
     def  getPositionRevealedCells(self):
         positions = []
@@ -190,15 +190,22 @@ class Board():
         
         print(f"Abertos ({len(self.revealedCells)})")
 
-    def infos(self, time):
-        print(f"Tempo: {time:.0f} s")
-        lostFont = pygame.font.SysFont('comicsans', 30)
-        timeText = lostFont.render(f"Tempo: {time:.0f} s", 1, "white")
-        flagsText = lostFont.render(f"Flags: {len(self.flags)}", 1, "white")
+    def infos(self, time, player):
+        # print(f"Tempo: {time:.0f} s")
+        font = pygame.font.SysFont('comicsans', 30)
+        timeText = font.render(f"Tempo: {time:.0f} s", 1, "white")
+        if player:
+            playerText = font.render(f"Player: IA", 1, "white")
+        else:
+            playerText = font.render(f"Player: Usuário", 1, "white")
 
-        self.screen.blit(timeText, (20, self.cols*self.size + 10))
-        self.screen.blit(flagsText, (self.rows*self.size - 100, self.cols*self.size + 10))
-
+        flagsText = font.render(f"Flags: {len(self.flags)}", 1, "white")
         width, height = self.screen.get_size()
+
+
+        self.screen.fill((0,0,0))
+        self.screen.blit(timeText, (20, self.cols*self.size + 10))
+        self.screen.blit(playerText, (width / 2 - playerText.get_width() / 2, self.cols*self.size + 10))
+        self.screen.blit(flagsText, (self.rows*self.size - 100, self.cols*self.size + 10))
 
         pygame.display.update((0, self.cols*self.size, width,  height - self.cols*self.size))
