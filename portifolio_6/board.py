@@ -1,5 +1,4 @@
 import random
-from time import perf_counter
 import pygame
 from collections import deque
 from utils import setImages 
@@ -8,13 +7,17 @@ from cell import Cell
 MOUSEBUTTONLEFT = 1
 MOUSEBUTTONRIGHT = 3
 
+# MAP = set([(3, 0), (3,1), (3, 2), (3, 3), (4, 3)])
+# MAP = set([(0, 0), (4, 2), (4, 3), (2, 4), (4, 4)])
+
 class Board():
-    def __init__(self, screen, clock, rows, cols, size, numMines):
+    def __init__(self, screen, rows, cols, size, numMines):
         self.numMines = numMines
         self.grid = []
         self.revealedCells = set()
         self.flags = set()
         self.mines = set()
+        # self.mines = MAP
 
         self.images = setImages(size, size)
         self.screen = screen
@@ -31,13 +34,13 @@ class Board():
     def buildGrid(self):
         for line in range(self.rows):
             self.grid.append([])
-            for column in range(self.rows):
+            for column in range(self.cols):
                 self.grid[line].append(Cell(line, column))
     
     def buildMapRandom(self):
         while len(self.mines) < self.numMines:
             row = random.randint(0, self.rows-1)
-            col = random.randint(0, self.rows-1)
+            col = random.randint(0, self.cols-1)
             if self.grid[row][col].hasMine:
                 continue
             self.grid[row][col].hasMine = True
@@ -48,7 +51,7 @@ class Board():
     def adjacentMines(self, x, y):
         for i in range(x-1, x+2):
             for j in range(y-1, y+2):
-                if i >= 0 and i < self.rows and j >= 0 and j < self.rows:
+                if i >= 0 and i < self.rows and j >= 0 and j < self.cols:
                     if self.grid[i][j].hasMine:
                         self.grid[x][y].adjacentMines += 1
 
@@ -56,7 +59,8 @@ class Board():
 
     def fillingBoard(self):
         for i in range(self.rows):
-            for j in range(self.rows):
+            for j in range(self.cols):
+                print(self.rows, self.cols)
                 if self.grid[i][j].hasMine:
                     self.grid[i][j].image = self.images.get("mine")
                 else:
@@ -78,9 +82,21 @@ class Board():
                         neighbors.add(self.grid[i][j])
         return neighbors
     
+    def getUnrevealedNeighborsPosition(self, cell):
+        neighbors = set()
+        x, y = cell
+        for i in range(x-1, x+2):
+            for j in range(y-1, y+2):
+                if i >= 0 and  i < self.rows and j >= 0 and j < self.cols:
+                    if (i, j) != (x, y):
+                        neighbor = self.grid[i][j]
+                        if neighbor not in self.revealedCells:
+                            neighbors.add((i, j))
+        return neighbors
+
     def draw(self):
         for x in range(self.rows):
-            for y in range(self.rows):
+            for y in range(self.cols):
                 cell = self.grid[x][y]
                 if cell in self.flags:
                     self.screen.blit(self.images.get("flag"), (cell.x * self.size, cell.y * self.size))
@@ -155,9 +171,9 @@ class Board():
     def checkResult(self):
         for row, col in self.mines:
             if  self.grid[row][col] in self.revealedCells:
-                print(f"Mina na casa ({row, col})")
+                # print(f"Mina na casa ({row, col})")
                 self.gameOver()
-                return 2
+                return -1
         
         if len(self.revealedCells) == (self.rows * self.cols) - self.numMines:
             self.won()
@@ -174,8 +190,8 @@ class Board():
 
 
     def cellClicked(self, row, col, mouseButton=MOUSEBUTTONLEFT):
+        print(row, col)
         cell = self.grid[row][col]
-
         if cell not in self.revealedCells:
             if mouseButton == MOUSEBUTTONRIGHT:
                 if cell in self.flags:
@@ -191,9 +207,9 @@ class Board():
         print(f"Abertos ({len(self.revealedCells)})")
 
     def infos(self, time, player):
-        # print(f"Tempo: {time:.0f} s")
+        # print(f"{time:.0f} s")
         font = pygame.font.SysFont('comicsans', 30)
-        timeText = font.render(f"Tempo: {time:.0f} s", 1, "white")
+        timeText = font.render(f"{time:.0f} s", 1, "white")
         if player:
             playerText = font.render(f"Player: IA", 1, "white")
         else:

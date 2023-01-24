@@ -1,0 +1,300 @@
+----- STATUS 1 -----
+Resultado: True
+Moves Prob: 3
+Moves Random: 1
+Moves Safe: 62
+Tempo: 8 s
+----- STATUS 2 -----
+Resultado: True
+Moves Prob: 2
+Moves Random: 1
+Moves Safe: 60
+Tempo: 10 s
+----- STATUS 3 -----
+Resultado: False
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 0
+Tempo: 0 s
+----- STATUS 4 -----
+Resultado: True
+Moves Prob: 2
+Moves Random: 1
+Moves Safe: 70
+Tempo: 12 s
+----- STATUS 5 -----
+Resultado: False
+Moves Prob: 3
+Moves Random: 1
+Moves Safe: 3
+Tempo: 0 s
+----- STATUS 6 -----
+Resultado: True
+Moves Prob: 4
+Moves Random: 1
+Moves Safe: 92
+Tempo: 32 s
+----- STATUS 7 -----
+Resultado: False
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 0
+Tempo: 0 s
+----- STATUS 8 -----
+Resultado: False
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 89
+Tempo: 20 s
+----- STATUS 9 -----
+Resultado: False
+Moves Prob: 2
+Moves Random: 1
+Moves Safe: 0
+Tempo: 0 s
+----- STATUS 10 -----
+Resultado: True
+Moves Prob: 0
+Moves Random: 1
+Moves Safe: 104
+Tempo: 12 s
+----- STATUS 11 -----
+Resultado: True
+Moves Prob: 0
+Moves Random: 1
+Moves Safe: 84
+Tempo: 32 s
+----- STATUS 12 -----
+Resultado: True
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 84
+Tempo: 24 s
+----- STATUS 13 -----
+Resultado: False
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 0
+Tempo: 0 s
+----- STATUS 14 -----
+Resultado: True
+Moves Prob: 6
+Moves Random: 1
+Moves Safe: 93
+Tempo: 16 s
+----- STATUS 15 -----
+Resultado: True
+Moves Prob: 0
+Moves Random: 1
+Moves Safe: 61
+Tempo: 3 s
+----- STATUS 16 -----
+Resultado: False
+Moves Prob: 4
+Moves Random: 1
+Moves Safe: 0
+Tempo: 0 s
+----- STATUS 17 -----
+Resultado: True
+Moves Prob: 6
+Moves Random: 1
+Moves Safe: 95
+Tempo: 16 s
+----- STATUS 18 -----
+Resultado: False
+Moves Prob: 3
+Moves Random: 1
+Moves Safe: 34
+Tempo: 2 s
+----- STATUS 19 -----
+Resultado: True
+Moves Prob: 4
+Moves Random: 1
+Moves Safe: 82
+Tempo: 17 s
+----- STATUS 20 -----
+Resultado: True
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 94
+Tempo: 19 s
+----- STATUS 21 -----
+Resultado: False
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 0
+Tempo: 0 s
+----- STATUS 22 -----
+Resultado: True
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 72
+Tempo: 8 s
+----- STATUS 23 -----
+Resultado: True
+Moves Prob: 0
+Moves Random: 1
+Moves Safe: 80
+Tempo: 6 s
+----- STATUS 24 -----
+Resultado: True
+Moves Prob: 3
+Moves Random: 1
+Moves Safe: 60
+Tempo: 2 s
+----- STATUS 25 -----
+Resultado: True
+Moves Prob: 2
+Moves Random: 1
+Moves Safe: 79
+Tempo: 12 s
+----- STATUS 26 -----
+Resultado: True
+Moves Prob: 8
+Moves Random: 1
+Moves Safe: 70
+Tempo: 6 s
+----- STATUS 27 -----
+Resultado: False
+Moves Prob: 2
+Moves Random: 1
+Moves Safe: 0
+Tempo: 0 s
+----- STATUS 28 -----
+Resultado: True
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 77
+Tempo: 3 s
+----- STATUS 29 -----
+Resultado: True
+Moves Prob: 3
+Moves Random: 1
+Moves Safe: 89
+Tempo: 15 s
+----- STATUS 30 -----
+Resultado: True
+Moves Prob: 3
+Moves Random: 1
+Moves Safe: 86
+Tempo: 19 s
+----- STATUS 31 -----
+Resultado: False
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 82
+Tempo: 6 s
+----- STATUS 32 -----
+Resultado: True
+Moves Prob: 0
+Moves Random: 1
+Moves Safe: 97
+Tempo: 26 s
+----- STATUS 33 -----
+Resultado: True
+Moves Prob: 0
+Moves Random: 1
+Moves Safe: 73
+Tempo: 11 s
+----- STATUS 34 -----
+Resultado: True
+Moves Prob: 2
+Moves Random: 1
+Moves Safe: 72
+Tempo: 5 s
+----- STATUS 35 -----
+Resultado: True
+Moves Prob: 2
+Moves Random: 1
+Moves Safe: 53
+Tempo: 11 s
+----- STATUS 36 -----
+Resultado: False
+Moves Prob: 8
+Moves Random: 1
+Moves Safe: 51
+Tempo: 10 s
+----- STATUS 37 -----
+Resultado: True
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 78
+Tempo: 11 s
+----- STATUS 38 -----
+Resultado: True
+Moves Prob: 0
+Moves Random: 1
+Moves Safe: 104
+Tempo: 14 s
+----- STATUS 39 -----
+Resultado: True
+Moves Prob: 5
+Moves Random: 1
+Moves Safe: 80
+Tempo: 4 s
+----- STATUS 40 -----
+Resultado: False
+Moves Prob: 4
+Moves Random: 1
+Moves Safe: 0
+Tempo: 0 s
+----- STATUS 41 -----
+Resultado: True
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 83
+Tempo: 22 s
+----- STATUS 42 -----
+Resultado: True
+Moves Prob: 4
+Moves Random: 1
+Moves Safe: 83
+Tempo: 11 s
+----- STATUS 43 -----
+Resultado: False
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 79
+Tempo: 20 s
+----- STATUS 44 -----
+Resultado: False
+Moves Prob: 6
+Moves Random: 1
+Moves Safe: 35
+Tempo: 10 s
+----- STATUS 45 -----
+Resultado: True
+Moves Prob: 0
+Moves Random: 1
+Moves Safe: 69
+Tempo: 7 s
+----- STATUS 46 -----
+Resultado: True
+Moves Prob: 8
+Moves Random: 1
+Moves Safe: 65
+Tempo: 17 s
+----- STATUS 47 -----
+Resultado: True
+Moves Prob: 5
+Moves Random: 1
+Moves Safe: 91
+Tempo: 16 s
+----- STATUS 48 -----
+Resultado: True
+Moves Prob: 4
+Moves Random: 1
+Moves Safe: 107
+Tempo: 19 s
+----- STATUS 49 -----
+Resultado: True
+Moves Prob: 1
+Moves Random: 1
+Moves Safe: 56
+Tempo: 4 s
+----- STATUS 50 -----
+Resultado: False
+Moves Prob: 2
+Moves Random: 1
+Moves Safe: 74
+Tempo: 5 s

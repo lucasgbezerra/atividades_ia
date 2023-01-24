@@ -2,17 +2,22 @@ import random
 from sentence import Sentence
 from itertools import combinations
 
+# MOVES = [(2,2), (2, 4), (3, 4), (4, 4), (4, 0), (2, 0)]
 class Solver():
-    def __init__(self, rows, cols):
-        self.cols = rows
-        self.rows = cols
+    def __init__(self, rows, cols, num_mines):
+        self.cols = cols
+        self.rows = rows
         self.revealed = set()
         self.mines = set()
         self.safes = set()
-
+        self.numMines = num_mines
         # Base de conhecimento composta por sentenças
         self.knowledgeBase = []
+        
+        self.generalProb = num_mines/(rows*cols)
+        self.probs = self.initProbs()
 
+        self.numProbMoves = 0
         self.numRandomMoves = 0
         self.numSafeMoves = 0
 
@@ -21,10 +26,19 @@ class Solver():
         self.mines.clear()
         self.safes.clear()
         self.knowledgeBase = []
-
-        self.numRandomMoves = 0
+        self.numProbMoves = 0
         self.numSafeMoves = 0
+        self.numRandomMoves = 0
 
+        self.generalProb = self.numMines/(self.rows*self.cols)
+        self.probs = self.initProbs()
+
+    def initProbs(self):
+        probs = []
+        for i in range(self.rows):
+            probs.append([self.generalProb]*self.cols)
+        return probs
+    
     def markMine(self, cell):
         self.mines.add(cell)
         for sentence in self.knowledgeBase:
@@ -129,10 +143,14 @@ class Solver():
 
             return (safeMove[0], safeMove[1])
         else:
-            return self.makeRandomMove()
+            return None
+        # move  = None
+        # if len(MOVES) > 0:
+        #     move = MOVES.pop(0)
+        # return move
 
     def makeRandomMove(self):
-        # print("Realizando movimento aleatório!")
+        print("Realizando movimento aleatório!")
         randomMove = None
         while randomMove == None:
             row = random.randint(0, self.rows-1)
@@ -147,10 +165,97 @@ class Solver():
 
         if randomMove != None:
             self.numRandomMoves += 1
-            print(f"Random move ({self.numRandomMoves}): {randomMove}")
+            print(f"Random move ({self.numProbMoves}): {randomMove}")
             self.revealed.add(randomMove)
             return randomMove
         else:
             return None
+        # move  = None
+        # if len(MOVES) > 0:
+        #     move = MOVES.pop(0)
+        # return move
 
-    
+    def  probBasedMove(self, numMines, numCells, board):
+
+        print(f"REVELADOS: {self.revealed}")
+        print(f"MINAS: {self.mines}")
+        print(f"SAFES: {self.safes}")
+        unknownNeighbors = set()
+
+        if len(self.revealed) == 0:
+            return self.makeRandomMove()
+
+        for cell in self.revealed:
+            unknownNeighbors.clear()
+            self.probs[cell[0]][cell[1]] = 0
+
+            if cell in self.mines:
+                continue
+
+            adMines = board.grid[cell[0]][cell[1]].adjacentMines
+            if adMines == 0:
+                continue
+
+            neighbors = board.getUnrevealedNeighborsPosition((cell[0], cell[1]))
+            if len(neighbors) == 0:
+                continue
+            
+            for neigh in neighbors:
+                if neigh in self.mines:
+                    adMines -= 1
+                else:
+                    unknownNeighbors.add(neigh)
+
+            if len(unknownNeighbors) == 0:
+                continue
+            prob = adMines/len(unknownNeighbors)
+            print(f"Base prob: {prob}")
+            print(f"CELL: {cell[0], cell[1]}")
+            
+            for (x, y) in unknownNeighbors:
+                print(f"N-CELL: {x, y} => PROB {self.probs[x][y]}")
+                if self.probs[x][y] == 1 or self.probs[x][y] == 0:
+                    continue
+                if prob == 0 or prob == 1:
+                    self.probs[x][y] = prob
+                else:
+                    self.probs[x][y] = (self.probs[x][y] + prob)/2
+
+                print(f"N-CELL: {x, y} => PROB {self.probs[x][y]}")
+        self.numProbMoves += 1
+        return self.recalcProbs((numMines - len(self.mines) ),(numCells - len(self.revealed)+len(self.mines)))
+
+    def recalcProbs(self, mines, cellsUnrevealed):
+        if cellsUnrevealed == 0:
+            return None
+        prob = self.generalProb
+        self.generalProb = mines/cellsUnrevealed
+        bestProb = 1
+        bestMoves = []
+
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if (i, j) in self.mines:
+                    self.probs[i][j] = 1
+                elif (i, j) in self.revealed:
+                    self.probs[i][j] = 0
+                elif self.probs[i][j] == prob:
+                        self.probs[i][j] = self.generalProb
+                if self.probs[i][j] <= bestProb and (i, j) not in self.revealed:
+                    if self.probs[i][j] < bestProb:
+                        bestProb = self.probs[i][j]
+                        bestMoves.clear()
+                        bestMoves.append((i, j))
+                    else:
+                        bestMoves.append((i, j))
+
+
+        for i in range(self.rows):
+            print(f"{i} -> {self.probs[i]}")
+        
+        print(f"MOVES= {bestMoves}")
+        bestMove  = random.choice(bestMoves)
+        print(f"MOVE: {bestMove} PROB: {bestProb*100:.2f}%")
+        self.revealed.add(bestMove)
+        return bestMove
+                
